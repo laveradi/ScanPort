@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: file-collector
+    env: python
+    buildCommand: pip install flask
+    startCommand: python app.py
