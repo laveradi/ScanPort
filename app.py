@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 import os
 
 app = Flask(__name__)
@@ -23,7 +23,12 @@ def list_files():
     files = os.listdir(UPLOAD_FOLDER)
     if not files:
         return 'Nessun file caricato.'
-    return '<br>'.join(files)
+    links = [f'<a href="/files/{f}">{f}</a>' for f in files]
+    return '<br>'.join(links)
+
+@app.route('/files/<filename>')
+def download_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
 
 @app.route('/')
 def index():
