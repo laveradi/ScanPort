@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = '/tmp/uploads'  # ✅ path generico che funziona ovunque
+UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route('/upload', methods=['POST'])
@@ -18,9 +18,16 @@ def upload():
     file.save(os.path.join(UPLOAD_FOLDER, filename))
     return 'OK', 200
 
+@app.route('/files')
+def list_files():
+    files = os.listdir(UPLOAD_FOLDER)
+    if not files:
+        return 'Nessun file caricato.'
+    return '<br>'.join(files)
+
 @app.route('/')
 def index():
-    return 'OK', 200  # ✅ risponde 200, Railway è felice
+    return 'OK', 200
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
